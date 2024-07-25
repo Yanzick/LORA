@@ -1,6 +1,7 @@
 #include "Arduino.h"
 #include "LoRa_E32.h"
 #include <SoftwareSerial.h>
+
 // Khởi tạo mô-đun LoRa với TX trên pin 6 và RX trên pin 7 của Arduino
 LoRa_E32 e32ttl100(6, 7); 
 
@@ -32,18 +33,18 @@ void setup() {
 
     // Cấu hình các tùy chọn khác
     configuration.OPTION.fec = FEC_1_ON;
-    /*configuration.OPTION.fixedTransmission = FT_TRANSPARENT_TRANSMISSION;
-    configuration.OPTION.ioDriveMode = IO_D_MODE_PUSH_PULLS_PULL_UPS;
-    configuration.OPTION.transmissionPower = POWER_17;
-    configuration.OPTION.wirelessWakeupTime = WAKE_UP_1250;*/
+    configuration.OPTION.transmissionPower = POWER_10; // Giảm công suất truyền để tiết kiệm năng lượng
+    // configuration.OPTION.fixedTransmission = FT_TRANSPARENT_TRANSMISSION;
+    // configuration.OPTION.ioDriveMode = IO_D_MODE_PUSH_PULLS_PULL_UPS;
+    // configuration.OPTION.wirelessWakeupTime = WAKE_UP_1250;
 
     // Thiết lập tốc độ truyền dữ liệu và các thông số UART
-    configuration.SPED.airDataRate = AIR_DATA_RATE_011_48;
-    configuration.SPED.uartBaudRate = UART_BPS_115200;
+    configuration.SPED.airDataRate = AIR_DATA_RATE_010_24; // Giảm tốc độ truyền dữ liệu để tiết kiệm năng lượng
+    configuration.SPED.uartBaudRate = UART_BPS_9600; // Giảm tốc độ UART để tiết kiệm năng lượng
     configuration.SPED.uartParity = MODE_00_8N1;
 
     // Gửi cấu hình mới đến mô-đun và không giữ cấu hình sau khi tắt nguồn
-    ResponseStatus rs = e32ttl100.setConfiguration(configuration, WRITE_CFG_PWR_DWN_LOSE);
+    ResponseStatus rs = e32ttl100.setConfiguration(configuration, WRITE_CFG_PWR_DWN_SAVE);
     Serial.println(rs.getResponseDescription());
     Serial.println(rs.code);
 
